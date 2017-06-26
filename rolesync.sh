@@ -10,3 +10,8 @@ backupArtifacts() {
 		echo "Backup dir not defined, skipping backup" >&2
 	fi
 }
+
+# list files in submodules, ignored by Git
+listArtifacts() {
+	git submodule --quiet foreach 'git ls-files --other | sed "s|^|$path/|"' | tr \\n \\0
+}
