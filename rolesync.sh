@@ -4,6 +4,10 @@ source "$CONFIG"
 
 # save artifacts to a local archive
 backupArtifacts() {
+	if [[ ! -d "$BACKUP_DIR" ]]; then
+		mkdir -p "$BACKUP_DIR"
+	fi
+
 	if [[ -n "$BACKUP_DIR" ]]; then
 		listArtifacts | xargs --null --no-run-if-empty tar -caf "$BACKUP_DIR/rolesync.tgz"
 	else
