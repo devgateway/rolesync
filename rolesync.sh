@@ -4,22 +4,22 @@ source "${XDG_CONFIG_HOME:-$HOME/.config}/rolesync.conf"
 case "$1" in
 	pack)
 		# remove controlled files from working directory
-		pushd "$SECRET_DIR" >/dev/null
+		pushd "$SECRET_REPO" >/dev/null
 		git ls-files -z \
 			| xargs --null rm -f
 
 		# copy current files from roles
-		cd "$ROLE_DIR"
+		cd "$ROLE_REPO"
 		git submodule --quiet foreach 'git ls-files --other | sed "s|^|$path/|"' \
 			| tr '\n' '\0' \
-			| rsync --verbose --files-from=- --from0 . "$SECRET_DIR"
+			| rsync --verbose --files-from=- --from0 . "$SECRET_REPO"
 
 		popd >/dev/null
 		;;
 
 	unpack)
-		pushd "$SECRET_DIR" >/dev/null
-		git archive HEAD | tar -xvC "$ROLE_DIR"
+		pushd "$SECRET_REPO" >/dev/null
+		git archive HEAD | tar -xvC "$ROLE_REPO"
 		popd >/dev/null
 		;;
 
