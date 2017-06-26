@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
 source "${XDG_CONFIG_HOME:-$HOME/.config}/rolesync.conf"
 
 case "$1" in
-
 	pack)
 		# remove controlled files from working directory
 		pushd "$SECRET_DIR" >/dev/null
