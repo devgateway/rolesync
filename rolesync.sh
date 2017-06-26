@@ -15,3 +15,11 @@ backupArtifacts() {
 listArtifacts() {
 	git submodule --quiet foreach 'git ls-files --other | sed "s|^|$path/|"' | tr \\n \\0
 }
+
+# download artifacts
+pullArtifacts() {
+}
+
+# upload artifacts
+pushArtifacts() {
+}
