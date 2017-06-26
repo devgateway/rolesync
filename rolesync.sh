@@ -23,3 +23,11 @@ pullArtifacts() {
 # upload artifacts
 pushArtifacts() {
 }
+
+(
+	pushd "$ROLE_DIR"
+
+	backupArtifacts
+
+	popd
+) >/dev/null
