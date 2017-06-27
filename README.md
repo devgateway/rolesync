@@ -24,4 +24,4 @@ Replace the contents of the working directory of the secret repo with the ignore
 
     rolesync.sh unpack
 
-Export files from secret repository `HEAD` to the submodules of the superproject.
+Remove untracked files/dirs from the submodules of the superproject, then export files from secret repository `HEAD` there.
