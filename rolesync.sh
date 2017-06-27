@@ -1,5 +1,27 @@
 #!/bin/bash -e
-source "${XDG_CONFIG_HOME:-$HOME/.config}/rolesync.conf"
+
+# Rolesync is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Rolesync is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with rolesync. If not, see <http://www.gnu.org/licenses/>.
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/rolesync.conf"
+source "$CONFIG"
+
+if [[ -z "$ROLE_REPO" || -z "$SECRET_REPO" ]]; then
+		cat >&2 <<-EOF
+		Both ROLE_REPO and SECRET_REPO must be defined in $CONFIG
+		EOF
+		exit 1
+fi
 
 case "$1" in
 	pack)
@@ -18,18 +40,21 @@ case "$1" in
 		;;
 
 	unpack)
-		pushd "$SECRET_REPO" >/dev/null
+		pushd "$ROLE_REPO" >/dev/null
+		git submodule --quiet foreach 'git clean -d --force'
+
+		cd "$SECRET_REPO"
 		git archive HEAD | tar -xvC "$ROLE_REPO"
 		popd >/dev/null
 		;;
 
 	*)
 		cat >&2 <<-EOF
-		USAGE: $0 pack|unpack
+		USAGE: $(basename "$0") pack|unpack
 		
 		pack - gather artifacts for a new commit
 		unpack - export artifacts to roles
 		EOF
-		exit 1
+		exit 2
 		;;
 esac
